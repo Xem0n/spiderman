@@ -28,6 +28,5 @@ namespace spiderman.Rendering
             a.Width == b.Width;
 
         public static bool operator !=(LineBatchConfig a, LineBatchConfig b) => !(a == b);
-
     }
 }
