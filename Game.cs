@@ -12,16 +12,16 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using spiderman.Rendering;
-using spiderman.Entities;
 
 namespace spiderman
 {
     internal class Game : GameWindow
     {
-        Player _player = new();
+        World _world;
 
         public Game(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
+            _world = new(this);
         }
 
         protected override void OnLoad()
@@ -45,7 +45,7 @@ namespace spiderman
                 Close();
             }
 
-            _player.Update(args, MouseState);
+            _world.Update();
 
             base.OnUpdateFrame(args);
         }
@@ -54,7 +54,7 @@ namespace spiderman
         {
             Renderer.StartRender();
 
-            _player.Draw();
+            _world.Draw();
 
             Renderer.FinishRender(Context);
 

@@ -72,6 +72,53 @@ namespace spiderman.Rendering
             _zIndex -= ZIndexModifier;
         }
 
+        static public void Rectangle(Vector2i pos, Vector2i size, Texture texture)
+        {
+            int width = Renderer.Resolution.X;
+            int height = Renderer.Resolution.Y;
+
+            float[] leftTop = Transform(pos);
+            float[] leftBottom = Transform(new(pos.X, pos.Y + size.Y));
+            float[] rightTop = Transform(new(pos.X + size.X, pos.Y));
+            float[] rightBottom = Transform(new(pos.X + size.X, pos.Y + size.Y));
+
+            float[] vertices =
+            {
+                //rightTop[0], rightTop[1], _zIndex, rightTop[0] / width, rightTop[1] / height,
+                //rightBottom[0], rightBottom[1], _zIndex, rightBottom[0] / width, rightBottom[1] / height,
+                //leftBottom[0], leftBottom[1], _zIndex, leftBottom[0] / width, leftBottom[1] / height,
+                //leftTop[0], leftTop[1], _zIndex, leftTop[0] / width, leftTop[1] / height,
+                rightTop[0], rightTop[1], _zIndex, 1.0f, 1.0f,
+                rightBottom[0], rightBottom[1], _zIndex, 1.0f, 0.0f,
+                leftBottom[0], leftBottom[1], _zIndex, 0.0f, 0.0f,
+                leftTop[0], leftTop[1], _zIndex, 0.0f, 1.0f
+                //rightTop[0], rightTop[1], _zIndex, rightTop[0], rightTop[1],
+                //rightBottom[0], rightBottom[1], _zIndex, rightBottom[0], rightBottom[1],
+                //leftBottom[0], leftBottom[1], _zIndex, leftBottom[0], leftBottom[1],
+                //leftTop[0], leftTop[1], _zIndex, leftTop[0], leftTop[1]
+                //0.5f,  0.5f, 0.0f, 1.0f, 1.0f, // top right
+                 //0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
+                //-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
+                //-0.5f,  0.5f, 0.0f, 0.0f, 1.0f  // top left
+            };
+
+            uint[] indices =
+            {
+                0, 1, 3,
+                1, 2, 3
+            };
+
+            TextureBatchConfig config = new(
+                PrimitiveType.Triangles,
+                BufferUsageHint.StreamDraw,
+                ShaderManager.Get("texture"),
+                texture
+            );
+
+            BatchManager.Add(vertices, indices, config);
+            _zIndex -= ZIndexModifier;
+        }
+
         static public void Circle(Vector2i center, int radius, Color4 color)
         {
             Vector2i pos = new(0, radius);

@@ -13,6 +13,12 @@ namespace spiderman.Rendering
         public BufferUsageHint RenderType;
         public int ShaderId;
 
+        public int[][] Attributes = new int[][]
+        {
+            new int[] { 3, 6, 0 },
+            new int[] { 3, 6, 3 }
+        };
+
         public BatchConfig(PrimitiveType primitive, BufferUsageHint renderType, int shaderId)
         {
             Primitive = primitive;
